@@ -7,27 +7,30 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:migrate": "npx sequelize-cli db:migrate --config src/config/config.js"
+    "db:migrate": "npx sequelize-cli db:migrate --config src/config/config.js --migrations-path src/migrations"
   },
   "dependencies": {
     "antd": "^5.22.2",
-    "chart.js": "^4.4.6",
+    "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
     "next": "14.2.14",
+    "next-auth": "^4.24.10",
+    "pg": "^8.13.1",
+    "pg-hstore": "^2.3.4",
     "react": "^18",
-    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "sequelize": "^6.37.5",
     "sequelize-cli": "^6.6.2"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20",
+    "@types/pg": "^8.11.10",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/sequelize": "^4.28.20",
     "eslint": "^8",
     "eslint-config-next": "14.2.14",
-    "mysql2": "^3.11.4",
-    "sqlite3": "^5.1.7",
     "typescript": "^5"
   }
 }

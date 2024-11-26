@@ -46,7 +46,7 @@ Movimentacao.init(
             type: DataTypes.UUID,
             allowNull: false,
             references: {
-                model: 'clientes',
+                model: 'Clientes',
                 key: 'id',
             },
             onDelete: 'CASCADE',
@@ -59,14 +59,14 @@ Movimentacao.init(
             type: DataTypes.UUID,
             allowNull: false,
             references: {
-                model: 'usuarios',
+                model: 'Usuarios',
                 key: 'id',
             },
         }
     },
     {
         sequelize,
-        tableName: 'movimentacoes',
+        tableName: 'Movimentacoes',
         timestamps: false,
     }
 );

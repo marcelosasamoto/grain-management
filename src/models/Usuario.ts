@@ -12,9 +12,9 @@ interface UsuarioAttributes {
     updatedAt?: Date;
 }
 
-interface UsuarioCreationAttributes extends Optional<UsuarioAttributes, 'id'> { }
+export interface UsuarioInterface extends Optional<UsuarioAttributes, 'id'> { }
 
-class Usuario extends Model<UsuarioAttributes, UsuarioCreationAttributes> implements UsuarioAttributes {
+export class Usuario extends Model<UsuarioAttributes, UsuarioInterface> implements UsuarioAttributes {
     public id!: string;
     public nome!: string;
     public email!: string;
@@ -57,7 +57,7 @@ Usuario.init(
     },
     {
         sequelize,
-        tableName: 'usuarios',
+        tableName: 'Usuarios',
     }
 );
 

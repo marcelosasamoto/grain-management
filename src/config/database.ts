@@ -1,20 +1,14 @@
 import { Sequelize } from 'sequelize';
-import sqlite3 from 'sqlite3'; // Certifique-se de importar o sqlite3 corretamente
+import pg from 'pg';
 
-// Carregar variáveis de ambiente do arquivo .env
 
-console.log('sequelize db', process.env.DB_NAME)
-const sequelize = new Sequelize(
-    process.env.DB_NAME || 'database_name',
-    process.env.DB_USER || 'username',
-    process.env.DB_PASSWORD || 'password',
-
+const sequelize = new Sequelize('postgres://postgres:senha123@localhost:5432/meubanco',
     {
-        dialect: 'sqlite',
-        storage: 'db.sqlite', // O caminho deve ser relativo ao diretório onde o processo Node.js está sendo executado
-        dialectModule: sqlite3,
-        logging: false, // Desativa os logs
+        dialect: 'postgres',
+        dialectModule: pg
     }
-);
+) // Example for postgres
+
+
 
 export default sequelize;

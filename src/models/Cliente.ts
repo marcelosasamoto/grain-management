@@ -10,9 +10,9 @@ interface ClienteAttributes {
   updatedAt?: Date;
 }
 
-interface ClienteCreationAttributes extends Optional<ClienteAttributes, 'id'> {}
+export interface ClienteInterface extends Optional<ClienteAttributes, 'id'> { }
 
-class Cliente extends Model<ClienteAttributes, ClienteCreationAttributes> implements ClienteAttributes {
+export class Cliente extends Model<ClienteAttributes, ClienteInterface> implements ClienteAttributes {
   public id!: string;
   public nome!: string;
   public tipo_documento!: 'Fisica' | 'Juridica' | 'Estrangeiro' | 'Outro';
@@ -24,11 +24,12 @@ class Cliente extends Model<ClienteAttributes, ClienteCreationAttributes> implem
 Cliente.init(
   {
     id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,  // Gerar UUID automaticamente
-        primaryKey: true,
-      },
-  
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,  // Gerar UUID automaticamente
+      primaryKey: true,
+      allowNull: false,
+    },
+
     nome: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -45,7 +46,7 @@ Cliente.init(
   },
   {
     sequelize,
-    tableName: 'clientes',
+    tableName: 'Clientes',
   }
 );
 

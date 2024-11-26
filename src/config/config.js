@@ -1,16 +1,23 @@
-const path = require('path');
-
 module.exports = {
   development: {
-    dialect: 'sqlite',
-    storage: path.resolve(__dirname, '../../db.sqlite'),
+    username: "postgres",
+    password: "senha123",
+    database: "meubanco",
+    host: "127.0.0.1",
+    dialect: "postgres"
   },
   test: {
-    dialect: 'sqlite',
-    storage: ':memory:',
+    username: "postgres",
+    password: "senha123",
+    database: "meubanco_test",
+    host: "127.0.0.1",
+    dialect: "postgres"
   },
   production: {
-    dialect: 'sqlite',
-    storage: path.resolve(__dirname, '../../pdb.sqlite'),
-  },
+    username: "postgres",
+    password: "senha123",
+    database: "meubanco_prod",
+    host: "127.0.0.1",
+    dialect: "postgres"
+  }
 };

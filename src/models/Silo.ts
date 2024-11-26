@@ -12,9 +12,9 @@ interface SiloAttributes {
   updatedAt?: Date;
 }
 
-interface SiloCreationAttributes extends Optional<SiloAttributes, 'id'> {}
+export interface SiloInterface extends Optional<SiloAttributes, 'id'> {}
 
-class Silo extends Model<SiloAttributes, SiloCreationAttributes> implements SiloAttributes {
+export class Silo extends Model<SiloAttributes, SiloInterface> implements SiloAttributes {
   public id!: number;
   public nome!: string;
   public capacidade_total!: number;
@@ -49,14 +49,14 @@ Silo.init(
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: 'clientes',
+          model: 'Clientes',
           key: 'id',
         },
       },
     updatedBy: {
       type: DataTypes.UUID,
       references:{
-        model:'usuarios',
+        model:'Usuarios',
         key:'id'
       },
       allowNull: false,
@@ -64,7 +64,7 @@ Silo.init(
   },
   {
     sequelize,
-    tableName: 'silos',
+    tableName: 'Silos',
   }
 );
 
