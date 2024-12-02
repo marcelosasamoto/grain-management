@@ -28,7 +28,7 @@ export class Silo extends Model<SiloAttributes, SiloInterface> implements SiloAt
 Silo.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -37,11 +37,11 @@ Silo.init(
       allowNull: false,
     },
     capacidade_total: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     capacidade_atual: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 0,
     },

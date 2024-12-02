@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../config/database';
+import Silo from './Silo'; // Importe o modelo de Silo
 
 interface MovimentacaoAttributes {
     id: number;
@@ -7,26 +8,26 @@ interface MovimentacaoAttributes {
     quantidade: number;
     siloId: number;
     clienteId: string;
-    createdBy: number; // ID do usuário que fez a movimentação
+    createdBy: string; // ID do usuário que fez a movimentação
     createdAt?: Date;
 }
 
-interface MovimentacaoCreationAttributes extends Optional<MovimentacaoAttributes, 'id'> { }
+export interface MovimentacaoSiloInterface extends Optional<MovimentacaoAttributes, 'id'> { }
 
-class Movimentacao extends Model<MovimentacaoAttributes, MovimentacaoCreationAttributes> implements MovimentacaoAttributes {
+export class Movimentacao extends Model<MovimentacaoAttributes, MovimentacaoSiloInterface> implements MovimentacaoAttributes {
     public id!: number;
     public tipo!: 'Entrada' | 'Saida';
     public quantidade!: number;
     public siloId!: number;
     public clienteId!: string;
-    public createdBy!: number;
+    public createdBy!: string;
     public readonly createdAt!: Date;
 }
 
 Movimentacao.init(
     {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
         },
@@ -35,11 +36,11 @@ Movimentacao.init(
             allowNull: false,
         },
         quantidade: {
-            type: DataTypes.DECIMAL(10, 2),
+            type: DataTypes.FLOAT,
             allowNull: false,
         },
         siloId: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         clienteId: {
@@ -66,9 +67,27 @@ Movimentacao.init(
     },
     {
         sequelize,
-        tableName: 'Movimentacoes',
-        timestamps: false,
+        tableName: 'MovimentacoesSilo',
+        hooks: {
+            afterCreate: async (movimentacao, options) => {
+                // Encontre o silo correspondente
+                const silo = await Silo.findByPk(movimentacao.siloId);
+
+                if (!silo) {
+                    throw new Error('Silo não encontrado');
+                }
+
+                // Atualiza a capacidade_atual baseado no tipo de movimentação
+                if (movimentacao.tipo === 'Entrada') {
+                    silo.capacidade_atual += movimentacao.quantidade;
+                } else if (movimentacao.tipo === 'Saida') {
+                    silo.capacidade_atual -= movimentacao.quantidade;
+                }
+
+                // Salva as mudanças na tabela Silo
+                await silo.save();
+            }
+        }
     }
 );
 
-export default Movimentacao;

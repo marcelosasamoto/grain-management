@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../config/database';
+import bcrypt from 'bcryptjs';
 
 interface UsuarioAttributes {
     id: string;
@@ -23,8 +24,14 @@ export class Usuario extends Model<UsuarioAttributes, UsuarioInterface> implemen
     public clienteId!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
+
+    // Método para comparar a senha fornecida com a senha armazenada (em formato hash)
+    public static async comparePassword(candidatePassword: string, hashedPassword: string): Promise<boolean> {
+        return bcrypt.compare(candidatePassword, hashedPassword);
+    }
 }
 
+// Hook para criptografar a senha antes de criar ou atualizar o usuário
 Usuario.init(
     {
         id: {
@@ -32,7 +39,6 @@ Usuario.init(
             defaultValue: DataTypes.UUIDV4,  // Gerar UUID automaticamente
             primaryKey: true,
         },
-
         nome: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -58,6 +64,20 @@ Usuario.init(
     {
         sequelize,
         tableName: 'Usuarios',
+        hooks: {
+            beforeCreate: async (usuario: Usuario) => {
+                if (usuario.senha) {
+                    // Criptografa a senha antes de salvar no banco
+                    usuario.senha = await bcrypt.hash(usuario.senha, 10); // 10 é o número de salt rounds
+                }
+            },
+            beforeUpdate: async (usuario: Usuario) => {
+                if (usuario.senha) {
+                    // Criptografa a senha antes de salvar no banco
+                    usuario.senha = await bcrypt.hash(usuario.senha, 10); // 10 é o número de salt rounds
+                }
+            }
+        }
     }
 );
 

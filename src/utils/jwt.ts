@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secretoo_mudepelamordedeus';
+const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'secretoo_mudepelamordedeus';
 
 interface TokenPayload {
+  nome:string,
   userId: string;
   clientId: string;
-  nivelAcesso: string;
+  nivel_acesso: string;
 }
 
 export const generateToken = (payload: TokenPayload): string => {
