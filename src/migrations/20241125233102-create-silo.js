@@ -1,11 +1,11 @@
 'use strict';
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Silos', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('silos', {
       id: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
-        allowNull: false,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
       },
       nome: {
@@ -18,37 +18,40 @@ module.exports = {
       },
       capacidade_atual: {
         type: Sequelize.FLOAT,
-        defaultValue: 0,
         allowNull: false,
+        defaultValue: 0,
       },
-      clienteId: {
+      cliente_id: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'Clientes',
+          model: 'clientes',
           key: 'id',
         },
         onDelete: 'CASCADE',
       },
-      updatedBy: {
+      updated_by: {
         type: Sequelize.UUID,
-        allowNull: true,
+        allowNull: false,
         references: {
-          model: 'Usuarios',
+          model: 'usuarios',
           key: 'id',
         },
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Silos');
+
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('silos');
   },
 };

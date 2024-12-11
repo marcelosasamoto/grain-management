@@ -1,11 +1,11 @@
 'use strict';
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Usuarios', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('usuarios', {
       id: {
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
-        allowNull: false,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'), // Para Postgres
         primaryKey: true,
       },
       nome: {
@@ -22,30 +22,27 @@ module.exports = {
         allowNull: false,
       },
       nivel_acesso: {
-        type: Sequelize.ENUM('admin', 'gerente', 'operador'),
+        type: Sequelize.ENUM('Root', 'Administrador', 'Gerente', 'Basico'),
         allowNull: false,
-        defaultValue: 'operador',
       },
-      clienteId: {
+      cliente_id: {
         type: Sequelize.UUID,
         allowNull: false,
-        references: {
-          model: 'Clientes',
-          key: 'id',
-        },
-        onDelete: 'CASCADE',
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Usuarios');
+
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('usuarios');
   },
 };

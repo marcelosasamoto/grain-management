@@ -1,12 +1,36 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { Silo, SiloInterface } from '@/models/Silo';
-import { NextApiRequest } from 'next';
+import { getParserToken } from '@/utils/getParserToken';
 
 // Listar Silos (GET)
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
+
   try {
-    const Silos = await Silo.findAll();
-    return NextResponse.json(Silos);
+    const decodedToken = getParserToken(req)
+    const id = req.nextUrl.searchParams.get('id')
+    console.log('okasd', decodedToken)
+    if (id) {
+      const silo = await Silo.findAll({
+        where: {
+          cliente_id: decodedToken.cliente_id,
+          id: id
+        }
+      })
+      if (!silo) {
+        return NextResponse.json({ error: 'Silo não encontrado' }, { status: 404 });
+      } else {
+        return NextResponse.json(silo);
+      }
+    }
+    else {
+      const Silos = await Silo.findAll({
+        where: {
+          cliente_id: decodedToken.cliente_id,
+        }
+      });
+      return NextResponse.json(Silos);
+    }
+
   } catch (error) {
     console.log(error)
     return NextResponse.json({ error: 'Erro ao listar Silos.' }, { status: 500 });
@@ -14,14 +38,17 @@ export async function GET(req: Request) {
 }
 
 // Criar cliente (POST)
-export async function POST(req: NextApiRequest) {
-  const clienteId = req.headers['x-cliente-id'];
-  const nivelAcesso = req.headers['x-nivel-acesso'];
-  const userId = req.headers['x-user-id'];
+export async function POST(req: NextRequest) {
+  const decodedToken = getParserToken(req)
   try {
-    const body: SiloInterface = await req.body
-    console.log('body', body, '\n\ncliente', clienteId, nivelAcesso)                          // Falta alterar para usar where clienteId e updatedBy
-    const Silos = await Silo.create(body);
+    const body: SiloInterface = await req.json()                       // Falta alterar para usar where cliente_id e updatedBy
+    const Silos = await Silo.create({
+      nome: body.nome,
+      capacidade_total: body.capacidade_total,
+      capacidade_atual: body.capacidade_atual,
+      cliente_id: decodedToken.cliente_id,
+      updated_by: decodedToken.user_id
+    });
     return NextResponse.json(Silos, { status: 201 });
   } catch (error: any) {
     console.log('\n\nerror', error)
@@ -34,6 +61,32 @@ export async function POST(req: NextApiRequest) {
   }
 }
 
+export async function PUT(req: NextRequest) {
+  const decodedToken = getParserToken(req)
+  const id = req.nextUrl.searchParams.get('id')
+  try {
+    if (!id) { throw new Error('Id não fornecido') }
 
+    const body = await req.json()
+    const silos = await Silo.findOne({
+      where: {
+        id: id,
+        cliente_id: decodedToken.cliente_id
+      }
+    })
+    if (!silos) {
+      return NextResponse.json({ error: 'Silo não encontrado.' }, { status: 404 });
+    }
+
+    await silos?.update({
+      nome: body.nome,
+      capacidade_total: body.capacidade_total,
+      updated_by: decodedToken.user_id
+    })
+    return NextResponse.json(silos)
+  } catch (error: any) {
+
+  }
+}
 
 

@@ -1,12 +1,18 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { Cliente, ClienteInterface } from '@/models/Cliente';
+import { NextApiRequest, NextApiResponse } from 'next';
 import db from 'src/config/database';
+import { getToken } from 'next-auth/jwt';
+import { getParserToken } from '@/utils/getParserToken';
 
 // Listar clientes (GET)
-export async function GET(req: Request) {
+export async function GET(req: NextRequest, res: NextResponse) {
     try {
+       const decodedToken = getParserToken(req)
+        
         const clientes = await Cliente.findAll();
-        return NextResponse.json(clientes);
+        const response = NextResponse.json(clientes)
+        return response
     } catch (error) {
         console.log(error)
         return NextResponse.json({ error: 'Erro ao listar clientes.' }, { status: 500 });
@@ -39,8 +45,8 @@ export async function PUT(req: Request) {
 
         await cliente.update(data);
         return NextResponse.json(cliente);
-    } catch (error:any) {
-        console.log('error client',error)
+    } catch (error: any) {
+        console.log('error client', error)
         if (error.parent?.code === '23505') { // Código de erro para duplicate key
             return NextResponse.json({ error: error.fields }, { status: 409 }); // Retorna o error de chave duplicada
         }

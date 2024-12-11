@@ -51,9 +51,8 @@ const GestaoSilosPage = () => {
       await axios.post('/api/protected/silos/movimentacao', {
         tipo:body.tipo,
         quantidade:body.quantidade,
-        siloId:body.siloId
+        silo_id:body.silo_id
 
-        // Outros campos como clienteId, etc.
       });
       message.success('Movimentação registrada com sucesso');
       fetchData(); // Atualizar dados
@@ -115,8 +114,8 @@ const GestaoSilosPage = () => {
           columns={[
             { title: 'Tipo', dataIndex: 'tipo', key: 'tipo' },
             { title: 'Peso (kg)', dataIndex: 'quantidade', key: 'quantidade' },
-            { title: 'Silo', dataIndex: 'siloId', key: 'siloId' },
-            { title: 'Data', dataIndex: 'createdAt', key: 'createdAt' },
+            { title: 'Silo', dataIndex: 'silo_id', key: 'silo_id' },
+            { title: 'Data', dataIndex: 'created_at', key: 'created_at' },
           ]}
           rowKey="id"
         />

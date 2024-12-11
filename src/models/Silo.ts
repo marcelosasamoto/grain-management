@@ -6,10 +6,10 @@ interface SiloAttributes {
   nome: string;
   capacidade_total: number;
   capacidade_atual: number;
-  clienteId: string;
-  updatedBy: string; // ID do usuário que fez a última alteração
-  createdAt?: Date;
-  updatedAt?: Date;
+  cliente_id: string;
+  updated_by: string; // ID do usuário que fez a última alteração
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface SiloInterface extends Optional<SiloAttributes, 'id'> {}
@@ -19,10 +19,10 @@ export class Silo extends Model<SiloAttributes, SiloInterface> implements SiloAt
   public nome!: string;
   public capacidade_total!: number;
   public capacidade_atual!: number;
-  public clienteId!: string;
-  public updatedBy!: string;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public cliente_id!: string;
+  public updated_by!: string;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 }
 
 Silo.init(
@@ -39,32 +39,40 @@ Silo.init(
     capacidade_total: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      validate: {
+        min: 0,
+      },
     },
     capacidade_atual: {
       type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 0,
+      validate: {
+        min: 0,
+      },
     },
-    clienteId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-          model: 'Clientes',
-          key: 'id',
-        },
-      },
-    updatedBy: {
+    cliente_id: {
       type: DataTypes.UUID,
-      references:{
-        model:'Usuarios',
-        key:'id'
-      },
       allowNull: false,
+      references: {
+        model: 'clientes', // Certifique-se de que o nome da tabela está em minúsculas
+        key: 'id',
+      },
+    },
+    updated_by: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'usuarios', // Certifique-se de que o nome da tabela está em minúsculas
+        key: 'id',
+      },
     },
   },
   {
     sequelize,
-    tableName: 'Silos',
+    tableName: 'silos',
+    timestamps: true,
+    underscored: true, // Gera colunas created_at e updated_at
   }
 );
 

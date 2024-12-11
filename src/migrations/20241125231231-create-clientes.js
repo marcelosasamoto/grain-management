@@ -2,11 +2,10 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Clientes', {
+    await queryInterface.createTable('clientes', {
       id: {
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4, // Gerar UUID automaticamente
-        allowNull:false,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'), // Para Postgres
         primaryKey: true,
       },
       nome: {
@@ -22,24 +21,20 @@ module.exports = {
         unique: true,
         allowNull: false,
       },
-      createdAt: {
+      created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
-      updatedAt: {
+      updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    // Remover a tabela
-    await queryInterface.dropTable('Clientes');
-
-    // Remover o ENUM criado
-    await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_clientes_tipo_documento";');
+    await queryInterface.dropTable('clientes');
   },
 };

@@ -28,7 +28,7 @@ export const MovimentacaoSiloModal = ({ visible, onSubmit, silos = [], onCancel 
           </Select>
         </Form.Item>
         <Form.Item
-          name="siloId"
+          name="silo_id"
           label="Silo"
           rules={[{ required: true }]}
         >

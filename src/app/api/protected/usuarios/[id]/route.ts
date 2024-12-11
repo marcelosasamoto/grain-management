@@ -1,12 +1,20 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { Usuario, UsuarioInterface } from '@/models/Usuario';
-import db from 'src/config/database';
+import { getParserToken } from '@/utils/getParserToken';
+
 
 // Mostrar Usuario por ID (GET)
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
     const id = params.id;
     try {
-        const usuario = await Usuario.findByPk(id);
+        const decodedToken = getParserToken(req)
+        const usuario = await Usuario.findOne({
+            where: {
+                cliente_id: decodedToken.cliente_id,
+                id: id
+
+            }
+        });
         if (!usuario) {
             return NextResponse.json({ error: 'usuario não encontrado' }, { status: 404 });
         }
@@ -25,8 +33,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
             nome: body.nome,
             email: body.email,
             senha: body.senha,
-            nivel_acesso:body.nivel_acesso,
-            clienteId:body.clienteId
+            nivel_acesso: body.nivel_acesso,
+            cliente_id: body.cliente_id
         }
         const usuario = await Usuario.findByPk(id);
         if (!usuario) {

@@ -27,7 +27,7 @@ const handler = NextAuth({
             return {
               id: usuario.id,
               nome: usuario.nome,
-              clienteId: usuario.clienteId,
+              cliente_id: usuario.cliente_id,
               nivel_acesso: usuario.nivel_acesso,
             };
           }
@@ -45,8 +45,8 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user }:any) {
       if (user) {
-        token.userId = user.id
-        token.clienteId = user.clienteId
+        token.user_id = user.id
+        token.cliente_id = user.cliente_id
         token.nivel_acesso = user.nivel_acesso
       }
       return token;
@@ -54,6 +54,7 @@ const handler = NextAuth({
     async session({ session, token }:any) {
       if (session.user && token.nivel_acesso) {
         session.user.nivel_acesso = token.nivel_acesso;
+        session.cliente_id = token.cliente_id
       }
       return session;
     },

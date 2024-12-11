@@ -1,19 +1,20 @@
-import Cliente from './Cliente';
-import Usuario from './Usuario';
 import Silo from './Silo';
-import Movimentacao from './MovimentacaoSilo';
+import MovimentacaoSilo from './MovimentacaoSilo';
+import Usuario from './Usuario';
+import Cliente from './Cliente';
 
-// Relacionamentos
-Cliente.hasMany(Usuario, { foreignKey: 'clienteId' });
-Usuario.belongsTo(Cliente, { foreignKey: 'clienteId' });
+// Cliente e Silos
+Cliente.hasMany(Silo, { foreignKey: 'cliente_id' });
+Silo.belongsTo(Cliente, { foreignKey: 'cliente_id' });
 
-Cliente.hasMany(Silo, { foreignKey: 'clienteId' });
-Silo.belongsTo(Cliente, { foreignKey: 'clienteId' });
+// Silo e Movimentações
+Silo.hasMany(MovimentacaoSilo, { foreignKey: 'silo_id' });
+MovimentacaoSilo.belongsTo(Silo, { foreignKey: 'silo_id' });
 
-Silo.hasMany(Movimentacao, { foreignKey: 'siloId' });
-Movimentacao.belongsTo(Silo, { foreignKey: 'siloId' });
+// Cliente e Movimentações
+Cliente.hasMany(MovimentacaoSilo, { foreignKey: 'cliente_id' });
+MovimentacaoSilo.belongsTo(Cliente, { foreignKey: 'cliente_id' });
 
-Usuario.hasMany(Movimentacao, { foreignKey: 'createdBy' });
-Movimentacao.belongsTo(Usuario, { foreignKey: 'createdBy' });
-
-export { Cliente, Usuario, Silo, Movimentacao };
+// Usuário e Movimentações
+Usuario.hasMany(MovimentacaoSilo, { foreignKey: 'created_by' });
+MovimentacaoSilo.belongsTo(Usuario, { foreignKey: 'created_by' });
