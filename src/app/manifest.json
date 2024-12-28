@@ -1,0 +1,37 @@
+{
+  "id": "grain-Management",
+  "name": "Grain Management",
+  "short_name": "Silo Controle",
+  "icons": [
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot1-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Desktop screenshot"
+    },
+    {
+      "src": "/screenshots/screenshot1-mobile.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "label": "Mobile screenshot"
+    }
+  ],
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}

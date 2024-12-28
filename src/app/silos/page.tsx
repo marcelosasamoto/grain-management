@@ -115,7 +115,9 @@ const GestaoSilosPage = () => {
             { title: 'Tipo', dataIndex: 'tipo', key: 'tipo' },
             { title: 'Peso (kg)', dataIndex: 'quantidade', key: 'quantidade' },
             { title: 'Silo', dataIndex: 'silo_id', key: 'silo_id' },
-            { title: 'Data', dataIndex: 'created_at', key: 'created_at' },
+            { title: 'Data', dataIndex: 'createdAt',render(value, record, index) {
+              return `${new Date(value).toLocaleDateString()}`
+            }, key: 'createdAt' },
           ]}
           rowKey="id"
         />

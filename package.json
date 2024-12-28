@@ -10,11 +10,15 @@
     "db:migrate": "npx sequelize-cli db:migrate --config src/config/config.js --migrations-path src/migrations"
   },
   "dependencies": {
+    "@serwist/next": "^9.0.11",
+    "@serwist/precaching": "^9.0.11",
+    "@serwist/sw": "^9.0.11",
+    "@tanstack/react-query": "^5.62.11",
     "antd": "^5.22.2",
     "axios": "^1.7.8",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
-    "next": "14.2.14",
+    "next": "^14.2.21",
     "next-auth": "^4.24.10",
     "pg": "^8.13.1",
     "pg-hstore": "^2.3.4",
